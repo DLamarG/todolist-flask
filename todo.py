@@ -1,16 +1,17 @@
 from flask import Flask, jsonify, abort, request, make_response
 from flaskext.mysql import MySQL
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)
 
 # Configuring MySQL database
-app.config['MYSQL_DATABASE_HOST'] = 'todo-database-server'
-app.config['MYSQL_DATABASE_USER'] = 'chandra'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'Chandra@123'
-app.config['MYSQL_DATABASE_DB'] = 'todo_db'
-app.config['MYSQL_DATABASE_PORT'] = 3306
+app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST', 'terraform-20250119042844317800000001.cdomocywq43e.us-east-2.rds.amazonaws.com')  # Default to 'localhost' if not set
+app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER', 'admin')  # Default to 'root' if not set
+app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD', 'adminpassword')
+app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB', 'todo_db')
+app.config['MYSQL_DATABASE_PORT'] = int(os.getenv('MYSQL_DATABASE_PORT', 3306))  # Default to 3306 if not set
 mysql = MySQL()
 mysql.init_app(app)
 connection = mysql.connect()
@@ -20,6 +21,10 @@ cursor = connection.cursor()
 # Function to initialize to-do database
 def init_todo_db():
     """Function to initialize the to-do list database by creating and populating the table."""
+
+    # Create the database if it doesn't exist
+    create_db = 'CREATE DATABASE IF NOT EXISTS todo_db;'
+    cursor.execute(create_db)
     # Drop table if it exists
     drop_table = 'DROP TABLE IF EXISTS todo_db.todos;'
     # Create new table
@@ -40,6 +45,8 @@ def init_todo_db():
         ("Ansible topics", "Just forgot. Need to revise again.", 0),
         ("Work on Belt exam", "Solve all the questions and get black belt", 0);
     """
+
+    
     cursor.execute(drop_table)
     cursor.execute(todos_table)
     cursor.execute(data)
@@ -149,4 +156,4 @@ def bad_request(error):
 if __name__== '__main__':
     init_todo_db()
 
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=3000)
