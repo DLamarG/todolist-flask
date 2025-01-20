@@ -4,7 +4,7 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:8000"}})
 
 # Configuring MySQL database
 app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST', 'terraform-20250119042844317800000001.cdomocywq43e.us-east-2.rds.amazonaws.com')  # Default to 'localhost' if not set
@@ -156,4 +156,4 @@ def bad_request(error):
 if __name__== '__main__':
     init_todo_db()
 
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=3000)
