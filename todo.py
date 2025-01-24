@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app, origins="*")
 
 # Configuring MySQL database
-app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST', 'terraform-20250119042844317800000001.cdomocywq43e.us-east-2.rds.amazonaws.com')  # Default to 'localhost' if not set
+app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST', 'localhost')  # Default to 'localhost' if not set
 app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER', 'admin')  # Default to 'root' if not set
 app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD', 'adminpassword')
 app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB', 'todo_db')
